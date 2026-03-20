@@ -32,5 +32,22 @@ export const useWhisper = () => {
     });
     return data.text;
   };
-  return { localRun, remoteRun };
+  const run = async <T extends boolean>(
+    useLocal: T,
+    input: T extends true ? Float32Array : Blob,
+  ) => {
+    if (useLocal) {
+      if (!(input instanceof Float32Array)) {
+        throw new Error("Local mode requires Float32Array input");
+      }
+      return localRun(input);
+    } else {
+      if (!(input instanceof Blob)) {
+        throw new Error("Remote mode requires Blob input");
+      }
+      return remoteRun(input);
+    }
+  };
+
+  return { localRun, remoteRun, run };
 };

@@ -7,10 +7,10 @@ import { useState } from "react";
 
 export default function Home() {
   const [transcription, setTranscription] = useState("");
-  const { remoteRun } = useWhisper();
+  const { run } = useWhisper();
   const { recording, processing } = useVad({
-    onSpeechEnd: async ({ blob }) => {
-      setTranscription(await remoteRun(blob));
+    onSpeechEnd: async ({ blob: _blob, float32Array }) => {
+      setTranscription(await run(true, float32Array));
     },
   });
 
